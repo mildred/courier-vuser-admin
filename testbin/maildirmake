@@ -1,0 +1,5 @@
+#!/bin/sh
+
+mkdir -p "$1/cur" "$1/new" "$1/tmp" "$1/courierimapkeywords"
+
+

@@ -1,0 +1,17 @@
+$def with(message = None, username = '', password = '', **kwargs)
+<!DOCTYPE html>
+
+$if message:
+  <p>$message</p>
+
+<h1>New User</h1>
+<form action="?" method="post">
+<label>Username: <input type="text" name="username" value="$username" required/></label>
+<br />
+<label>Password: <input type="password" name="password" value="$password" required/></label>
+<br />
+<label>Repeat Password: <input type="password" name="password2" required/></label>
+<br />
+<input type="submit" />
+</form>
+

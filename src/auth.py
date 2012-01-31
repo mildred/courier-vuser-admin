@@ -6,6 +6,7 @@ import base64
 def get():
   auth = web.ctx.env.get('HTTP_AUTHORIZATION')
   authreq = False
+  isAdmin = False
   if auth is None:
     authreq = True
   else:
@@ -14,11 +15,13 @@ def get():
     if username == config.admin_login:
       if password != config.admin_pass:
         authreq = True
+      else:
+        isAdmin = True
     else:
       authreq = True
   if authreq:
     web.header('WWW-Authenticate','Basic realm="Authenticate"')
     web.ctx.status = '401 Unauthorized'
     raise web.Unauthorized()
-  return username
+  return username, isAdmin
 

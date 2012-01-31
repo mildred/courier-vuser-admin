@@ -4,10 +4,11 @@ import sys, os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import web
-from controlers import *
+from controllers import *
 
 urls = (
-  '/',      'Index')
+  '/',         'Index',
+  '/new_user', 'NewUser')
 
 app = web.application(urls, globals())
 

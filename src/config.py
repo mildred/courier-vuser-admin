@@ -4,6 +4,9 @@ admin_pass  = 'admin'
 debug       = False
 configdir   = '/etc/courier'
 userdir     = '/srv/courier'
-userid      = 'vmail'
-groupid     = 'vmail'
+virt_user   = 'vmail'
+virt_group  = 'vmail'
+
+virt_user   = 'mildred'
+virt_group  = 'mildred'
 

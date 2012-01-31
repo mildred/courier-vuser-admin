@@ -1,0 +1,13 @@
+$def with(user, admin)
+<!DOCTYPE html>
+
+$if admin:
+  <p>You are admin $user</p>
+$else:
+  <p>You are $user</p>
+  
+
+<ul>
+  <li><a href="new_user">Create user</a></li>
+</ul>
+
