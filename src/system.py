@@ -16,5 +16,10 @@ def uid_for_user(user):
 
 def call(args):
   log = "> " + " ".join(args) + "\n"
-  log += subprocess.check_output(args)
+  p = subprocess.Popen(args, stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+  out, _ = p.communicate()
+  log += out
+  if p.returncode != 0:
+    raise Exception("Returned %d:\n> %s\n%s" % (p.returncode, " ".join(args), out))  
   return log
+

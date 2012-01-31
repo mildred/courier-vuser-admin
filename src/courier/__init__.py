@@ -7,14 +7,19 @@ def userdbpw(password, method=None):
     args.append("-md5")
   elif method == "hmac-md5":
     args.append("-hmac-md5")
-  p = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-  res, _ = p.communicate(input=password + "\n")
-  p.wait()
+  p = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+  res, err = p.communicate(input=password + "\n")
+  if p.returncode != 0:
+    raise Exception("Error %d:\n%s" % (p.returncode, err))
   return res.strip()
 
 def call(args):
   log = "> " + " ".join(args) + "\n"
-  log += subprocess.check_output(args)
+  p = subprocess.Popen(args, stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+  out, _ = p.communicate()
+  log += out
+  if p.returncode != 0:
+    raise Exception("Returned %d:\n> %s\n%s" % (p.returncode, " ".join(args), out))  
   return log
 
 def create_home(home, uid, gid):
