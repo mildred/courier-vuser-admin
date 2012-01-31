@@ -13,5 +13,5 @@ import config
 web.config.debug = False
 config.debug = False
 
-application = artcdn.app.wsgifunc()
+application = main.app.wsgifunc()
 
