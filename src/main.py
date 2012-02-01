@@ -1,19 +1,13 @@
 #!/usr/bin/env python
 
 import sys, os
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from os.path import abspath, dirname, join
 
-import web
-from controllers import *
+sys.path.insert(0, join(dirname(abspath(__file__)), "..", "override"))
+sys.path.insert(0, dirname(abspath(__file__)))
 
-urls = (
-  '/',         'Index',
-  '/users',    'Users',
-  '/new_user', 'NewUser')
+import web, app, config
 
-app = web.application(urls, globals())
+web.config.debug = config.debug
+app.app.run()
 
-
-if __name__ == "__main__":
-  web.config.debug = config.debug
-  app.run()

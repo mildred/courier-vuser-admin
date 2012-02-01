@@ -1,17 +1,16 @@
 #!/usr/bin/env python
 # See: <http://webpy.org/cookbook/mod_wsgi-apache>
 
-import sys
-import os
+import sys, os
+from os.path import abspath, dirname, join
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, join(dirname(abspath(__file__)), "..", "override"))
+sys.path.insert(0, dirname(abspath(__file__)))
 
-import main
-import web
-import config
+import web, app, config
 
 web.config.debug = False
 config.debug = False
 
-application = main.app.wsgifunc()
+application = app.app.wsgifunc()
 
