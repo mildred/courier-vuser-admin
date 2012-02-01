@@ -36,7 +36,7 @@ grant_auth(){
   if ! [ -w "$COURIER_CONFIG_DIR" ] && ! [ -O "$COURIER_CONFIG_DIR" ]; then
     user=$(stat --format=%U "$COURIER_CONFIG_DIR")
     echo "Request $user permissions from `whoami`..."
-    echo ">" sudo -u $user "$scriptdir/$scriptname" "$@"
+    echo ">" sudo -u $user "$scriptdir/$scriptname" . "$@"
     exec sudo -u $user "$scriptdir/$scriptname" "$@"
   fi
 }
