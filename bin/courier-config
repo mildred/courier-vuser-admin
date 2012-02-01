@@ -8,14 +8,6 @@ scriptname="$(basename "$0")"
 
 export COURIER_CONFIG_DIR="${COURIER_CONFIG_DIR:-/etc/courier}"
 
-grant_auth(){
-  if ! [ -w "$COURIER_CONFIG_DIR" ] && ! [ -O "$COURIER_CONFIG_DIR" ]; then
-    user=$(stat --format=%U "$COURIER_CONFIG_DIR")
-    echo "Request $user permissions from `whoami`..."
-    exec sudo -u $user "$scriptdir/$scriptname" "$@"
-  fi
-}
-
 log(){
   echo "> $@" >&2
   "$@"
@@ -38,6 +30,14 @@ elog(){
 error(){
   echo "$@"
   exit 1
+}
+
+grant_auth(){
+  if ! [ -w "$COURIER_CONFIG_DIR" ] && ! [ -O "$COURIER_CONFIG_DIR" ]; then
+    user=$(stat --format=%U "$COURIER_CONFIG_DIR")
+    echo "Request $user permissions from `whoami`..."
+    elog sudo -u $user "$scriptdir/$scriptname" "$@"
+  fi
 }
 
 case "$1" in
