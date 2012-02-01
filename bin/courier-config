@@ -15,10 +15,10 @@ grant_auth(){
 }
 
 log(){
-  echo "> $@"
+  echo "> $@" >&2
   "$@"
   local res=$?
-  echo "[exit $res]"
+  echo "[exit $res]" >&2
   return $res
 }
 
@@ -38,7 +38,7 @@ case "$1" in
     gid="$5"
     dbfile="$COURIER_CONFIG_DIR/userdb"
 
-    if ! (userdb -f "$dbfile" -show | grep -Fx "$username" >/dev/null); then
+    if ! (log userdb -show -f "$dbfile" | log grep -Fx "$username" >/dev/null); then
       error "User $username already exists in $dbfile"
     fi
     
