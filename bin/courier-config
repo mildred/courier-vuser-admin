@@ -18,7 +18,7 @@ log(){
   echo "> $@" >&2
   "$@"
   local res=$?
-  echo "[exit $res]" >&2
+  [ $res -ne 0 ] && echo "[exit $res]" >&2
   return $res
 }
 
@@ -45,13 +45,13 @@ case "$1" in
     log mkdir -p "$home"
     log maildirmake "$home/Maildir"
     log touch "$home/.courier" "$home/.courier-default"
-    log -R chown $uid:$gid "$home"
+    log chown -R $uid:$gid "$home"
     
     uid=$(stat --format=%u "$home")
     gid=$(stat --format=%g "$home")
 
-    userdbpw -hmac-md5 <<<"$password" | log userdb -f "$dbfile" "$username" set systempw
-    userdbpw -md5 <<<"$password" | log userdb -f "$dbfile" "$username" set hmac-md5pw
+    log userdbpw -hmac-md5 <<<"$password" | log userdb -f "$dbfile" "$username" set systempw
+    log userdbpw <<<"$password" | log userdb -f "$dbfile" "$username" set hmac-md5pw
     log userdb -f "$dbfile" "$username" set home="$home" uid="$uid" gid="$gid"
     log makeuserdb
     ;;
