@@ -11,7 +11,7 @@ export COURIER_CONFIG_DIR="${COURIER_CONFIG_DIR:-/etc/courier}"
 grant_auth(){
   if ! [ -w "$COURIER_CONFIG_DIR" ] && ! [ -O "$COURIER_CONFIG_DIR" ]; then
     user=$(stat --format=%U "$COURIER_CONFIG_DIR")
-    echo "Request $user permissions ..."
+    echo "Request $user permissions from `whoami`..."
     exec sudo -u $user "$scriptdir/$scriptname" "$@"
   fi
 }
