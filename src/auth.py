@@ -8,19 +8,19 @@ def get(admin=True):
   authreq = False
   isAdmin = False
   if auth is None:
-    authreq = True
+    authreq = "You need to authenticate"
   else:
     auth = re.sub('^Basic ','',auth)
     username, password = base64.decodestring(auth).split(':')
     if username == config.admin_login:
       if password != config.admin_pass:
-        authreq = True
+        authreq = "Wrong admin password"
       else:
         isAdmin = True
     else:
-      authreq = True
+      authreq = "Unable to login with %s" % username
   if authreq or (admin and not isAdmin):
-    web.header('WWW-Authenticate','Basic realm="Authenticate"')
+    web.header('WWW-Authenticate', 'Basic realm="%s"' % authreq)
     web.ctx.status = '401 Unauthorized'
     raise web.Unauthorized()
   return username, isAdmin
