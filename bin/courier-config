@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 export LANG=C
 export LC_ALL=C
@@ -30,8 +30,8 @@ error(){
 case "$1" in
   createuser)
     grant_auth "$COURIER_CONFIG_DIR" "$@"
+
     read password
-    
     username="$2"
     home="$3"
     uid="$4"
