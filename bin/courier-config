@@ -10,7 +10,9 @@ export COURIER_CONFIG_DIR="${COURIER_CONFIG_DIR:-/etc/courier}"
 
 grant_auth(){
   if ! [ -w "$COURIER_CONFIG_DIR" ] && ! [ -O "$COURIER_CONFIG_DIR" ]; then
-    exec sudo -u $(stat --format=%U "$COURIER_CONFIG_DIR") "$scriptdir/$scriptname" "$@"
+    user=$(stat --format=%U "$COURIER_CONFIG_DIR")
+    echo "Request $user permissions ..."
+    exec sudo -u $user "$scriptdir/$scriptname" "$@"
   fi
 }
 
