@@ -38,7 +38,7 @@ case "$1" in
     gid="$5"
     dbfile="$COURIER_CONFIG_DIR/userdb"
 
-    if ! (log userdb -show -f "$dbfile" | log grep -Fx "$username" >/dev/null); then
+    if (userdb -show -f "$dbfile" | grep -Fx "$username" >/dev/null); then
       error "User $username already exists in $dbfile"
     fi
     
