@@ -37,6 +37,7 @@ grant_auth(){
     user=$(stat --format=%U "$COURIER_CONFIG_DIR")
     echo "Request $user permissions from `whoami`..."
     elog sudo -u $user "$scriptdir/$scriptname" "$@"
+    exit 0
   fi
 }
 
