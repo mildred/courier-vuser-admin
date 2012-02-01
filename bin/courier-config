@@ -18,7 +18,18 @@ log(){
   echo "> $@" >&2
   "$@"
   local res=$?
-  echo "[exit $res]" >&2
+  [ $res -ne 0 ] && echo "[exit $res]" >&2
+  return $res
+}
+
+elog(){
+  echo "> $@" >&2
+  "$@"
+  local res=$?
+  if [ $res -ne 0 ]; then
+    echo "[failure exit $res]" >&2
+    exit $res
+  fi
   return $res
 }
 
@@ -38,22 +49,22 @@ case "$1" in
     gid="$5"
     dbfile="$COURIER_CONFIG_DIR/userdb"
 
-    if (userdb -show -f "$dbfile" | grep -Fx "$username" >/dev/null); then
+    if userdb -show -f "$dbfile" | grep -Fx "$username" >/dev/null; then
       error "User $username already exists in $dbfile"
     fi
     
-    log mkdir -p "$home"
-    log maildirmake "$home/Maildir"
-    log touch "$home/.courier" "$home/.courier-default"
-    log -R chown $uid:$gid "$home"
+    elog mkdir -p "$home"
+    elog maildirmake "$home/Maildir"
+    elog touch "$home/.courier" "$home/.courier-default"
+    elog chown -R $uid:$gid "$home"
     
     uid=$(stat --format=%u "$home")
     gid=$(stat --format=%g "$home")
 
-    userdbpw -hmac-md5 <<<"$password" | log userdb -f "$dbfile" "$username" set systempw
-    userdbpw -md5 <<<"$password" | log userdb -f "$dbfile" "$username" set hmac-md5pw
-    log userdb -f "$dbfile" "$username" set home="$home" uid="$uid" gid="$gid"
-    log makeuserdb
+    elog userdbpw -hmac-md5 <<<"$password" | elog userdb -f "$dbfile" "$username" set systempw
+    elog userdbpw <<<"$password" | elog userdb -f "$dbfile" "$username" set hmac-md5pw
+    elog userdb -f "$dbfile" "$username" set home="$home" uid="$uid" gid="$gid"
+    elog makeuserdb
     ;;
   help)
     echo "$scriptname help"

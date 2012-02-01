@@ -17,7 +17,11 @@ def uid_for_user(user):
 
 def call(args, input=None):
   log = "> " + " ".join(args) + "\n"
-  p = subprocess.Popen(args, stdin=None, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+  if input:
+    stdin = subprocess.PIPE
+  else:
+    stdin = None
+  p = subprocess.Popen(args, stdin=stdin, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
   out, _ = p.communicate(input=input)
   log += out
   if p.returncode != 0:
