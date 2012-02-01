@@ -13,6 +13,12 @@ class Index:
     user, admin = auth.get()
     return view.render.index(user, admin)
 
+class Users:
+  def GET(self):
+    auth.get()
+    db = UserDB(config.configdir)
+    return view.render.users(db)
+
 class NewUser:
   def GET(self):
     auth.get()

@@ -3,7 +3,7 @@ import config
 import re
 import base64
 
-def get():
+def get(admin=True):
   auth = web.ctx.env.get('HTTP_AUTHORIZATION')
   authreq = False
   isAdmin = False
@@ -19,7 +19,7 @@ def get():
         isAdmin = True
     else:
       authreq = True
-  if authreq:
+  if authreq or (admin and not isAdmin):
     web.header('WWW-Authenticate','Basic realm="Authenticate"')
     web.ctx.status = '401 Unauthorized'
     raise web.Unauthorized()

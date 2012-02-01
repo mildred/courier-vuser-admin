@@ -1,5 +1,8 @@
 #!/bin/sh
 
+export LANG=C
+export LC_ALL=C
+
 scriptdir="$(cd "$(dirname "$0")"; pwd)"
 scriptname="$(basename "$0")"
 
@@ -19,10 +22,43 @@ log(){
   return $res
 }
 
+error(){
+  echo "$@"
+  exit 1
+}
+
 case "$1" in
   createuser)
     grant_auth "$COURIER_CONFIG_DIR" "$@"
+    read password
     
+    username="$2"
+    home="$3"
+    uid="$4"
+    gid="$5"
+    dbfile="$COURIER_CONFIG_DIR/userdb"
+
+    if ! (userdb -f "$dbfile" -show | grep -Fx "$username" >/dev/null); then
+      error "User $username already exists in $dbfile"
+    fi
+    
+    log mkdir -p "$home"
+    log maildirmake "$home/Maildir"
+    log touch "$home/.courier" "$home/.courier-default"
+    log -R chown $uid:$gid "$home"
+    
+    uid=$(stat --format=%u "$home")
+    gid=$(stat --format=%g "$home")
+
+    userdbpw -hmac-md5 <<<"$password" | log userdb -f "$dbfile" "$username" set systempw
+    userdbpw -md5 <<<"$password" | log userdb -f "$dbfile" "$username" set hmac-md5pw
+    log userdb -f "$dbfile" "$username" set home="$home" uid="$uid" gid="$gid"
     log makeuserdb
+    ;;
+  help)
+    echo "$scriptname help"
+    echo "$scriptname createuser USERNAME HOME UID GID"
+    echo
+    echo "COURIER_CONFIG_DIR=/etc/courier"
     ;;
 esac
