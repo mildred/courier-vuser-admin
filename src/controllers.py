@@ -15,7 +15,6 @@ class Index:
 class Users:
   def GET(self):
     auth.get()
-    db = UserDB(config.configdir)
     log, userlist = system.call_helper(["userdb"])
     return view.render.users(userlist.strip().split("\n"))
 
