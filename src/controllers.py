@@ -15,8 +15,11 @@ class Index:
 class Users:
   def GET(self):
     auth.get()
-    log, userlist = system.call_helper(["userdb"])
-    return view.render.users(userlist.strip().split("\n"))
+    try:
+      log, userlist = system.call_helper(["userdb"])
+      return view.render.users(userlist.strip().split("\n"))
+    except Exception as e:
+      return view.render.report("Error", e.message)
 
 class NewUser:
 
