@@ -1,14 +1,8 @@
-$def with(db)
+$def with(userlist)
 <!DOCTYPE html>
 
 <ul>
-$for user in db.users:
-  <li>$user
-  <dl>
-  $for k in db.users[user]:
-    <dt>$k</dt>
-    <dd>$(db.users[user][k])</dd>
-  </dl>
-  </li>
+$for user in userlist:
+  <li>$user</li>
 </ul>
 

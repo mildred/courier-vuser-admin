@@ -3,7 +3,6 @@ import config
 import auth
 import view
 import system
-import courier
 
 from courier.userdb import UserDB
 from os import path
@@ -17,7 +16,8 @@ class Users:
   def GET(self):
     auth.get()
     db = UserDB(config.configdir)
-    return view.render.users(db)
+    log, userlist = system.call_helper(["userdb"])
+    return view.render.users(userlist.strip().split("\n"))
 
 class NewUser:
 

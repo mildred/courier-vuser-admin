@@ -22,11 +22,11 @@ def call(args, input=None):
   else:
     stdin = None
   p = subprocess.Popen(args, stdin=stdin, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-  out, _ = p.communicate(input=input)
+  out, err = p.communicate(input=input)
   log += out
   if p.returncode != 0:
     raise Exception("Returned %d:\n> %s\n%s" % (p.returncode, " ".join(args), out))  
-  return log
+  return log, out
 
 def call_helper(args, input=None):
   return call([config.helper_path] + args, input=input)
