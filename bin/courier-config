@@ -74,8 +74,9 @@ case "$1" in
     shift
     dbfile="$COURIER_CONFIG_DIR/userdb"
     
-    if [ -z "$*" ]; then
-      exec userdb -show -f "$dbfile"
+    if [ -z "$*" ] || [ "-show" = "$1" ]; then
+      shift
+      exec userdb -show -f "$dbfile" "$@"
     else
       exec userdb -f "$dbfile" "$@"
     fi
