@@ -69,7 +69,18 @@ case "$1" in
     elog userdb -f "$dbfile" "$username" set home="$home" uid="$uid" gid="$gid"
     elog makeuserdb
     ;;
-  help)
+  userdb)
+    grant_auth "$@"
+    shift
+    dbfile="$COURIER_CONFIG_DIR/userdb"
+    
+    if [ -z "$*" ]; then
+      exec userdb -show -f "$dbfile"
+    else
+      exec userdb -f "$dbfile" "$@"
+    fi
+    ;;
+  *)
     echo "$scriptname help"
     echo "$scriptname createuser USERNAME HOME UID GID"
     echo
