@@ -4,8 +4,7 @@ import auth
 import view
 import system
 
-from courier.userdb import UserDB
-from os import path
+from os.path import join
 
 class Index:        
   def GET(self):
@@ -35,7 +34,7 @@ class NewUser:
     try:
       log = system.call_helper(["createuser",
         d.username,
-        path.join(config.userdir, d.username),
+        join(config.userdir, d.username),
         config.virt_user,
         config.virt_group], input="%s\n" % d.password)
       return view.render.report("New User", log)
